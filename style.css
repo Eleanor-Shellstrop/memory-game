@@ -1,0 +1,52 @@
+* {
+    font-family: 'Coiny', cursive;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#card {
+    min-width: 85px;
+    min-height: 120px;
+    margin: 10px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: center right;
+    transition: transform 1s;
+}
+
+#card_back,
+#card_front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+}
+
+#card_back {
+    background-image: url("./imgs/back.png");
+    background-size: cover;
+    
+}
+
+/* transform keeps face down until flipped */
+#card_front {
+    background: goldenrod;
+    transform: rotateY(180deg);
+}
+
+
+#card.is-flipped {
+    transform: translateX(-100%) rotateY(-180deg);
+  }
