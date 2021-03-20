@@ -1,42 +1,62 @@
-/**
- * *  ADD CARDS TO BOARD IN HTML
- *    card is appended child of board
- *    cardFront and cardBack are children appended to card
- */
+//* MAKE 12 CARDS
 
-function addCard () {
+//  Images for memory game, 6 indivdual pictures (12 pairs)
+const images =  ["center / cover url(./imgs/image1.png)", 
+                "center / cover url(./imgs/image1.png)", 
+                "center / cover url(./imgs/image2.png)",
+                "center / cover url(./imgs/image2.png)",
+                "center / cover url(./imgs/image3.png)",
+                "center / cover url(./imgs/image3.png)",
+                "center / cover url(./imgs/image4.png)", 
+                "center / cover url(./imgs/image4.png)", 
+                "center / cover url(./imgs/image5.png)",
+                "center / cover url(./imgs/image5.png)",
+                "center / cover url(./imgs/image6.png)",
+                "center / cover url(./imgs/image6.png)"];
+                
+//  Function to make appended children:
+//  Card appends to Board
+//  cardFront and cardBack append to Card
+
+function addCard (index) {
   const board = document.getElementById("board");
-
+  
   const card = document.createElement('div');
   card.setAttribute('id', 'card');
-
+  
+  //  Set unique IDs to front, shift off images array for card pictures
   const cardFront = document.createElement('div');
-  cardFront.setAttribute('id', 'card_front');
-
+  cardFront.setAttribute('class', 'card_front');
+  cardFront.setAttribute('id', 'card_front--' + index);
+  cardFront.style.background = images.shift();
+  
   const cardBack = document.createElement('div');
   cardBack.setAttribute('id', 'card_back');
- 
+  
+  //  Append sides to card first
   card.appendChild(cardBack);
   card.appendChild(cardFront);
  
+  //    Then append card to board
   board.appendChild(card);
 }
-//----------------------------------------------------------------------------------
-
-//* MAKE 12 CARDS
 
 const cards =   ["card1", "card2", "card3", "card4", "card5", "card6", 
                 "card7", "card8", "card9", "card10", "card11", "card12"]
+const allIds = [];
 
 for (let i = 0; i < cards.length; i++) {
-  addCard();
+  addCard([i]);
+  allIds.push([i]);
 }
 
+console.log(allIds);
 //----------------------------------------------------------------------------------
 
 //* FLIP CARDS ON CLICK
 
-document.querySelectorAll('#card').forEach(card => {
+const cardList = document.querySelectorAll('#card');
+cardList.forEach(card => {
   card.addEventListener('click', () => {
     card.classList.toggle('is-flipped');
   });
@@ -44,27 +64,11 @@ document.querySelectorAll('#card').forEach(card => {
 
 //----------------------------------------------------------------------------------
 
-const image1 = document.createElement("img");
-image1.src = "./imgs/image1.png";
+function shuffle() {
+  cardList.forEach(card => {
+    let ramdomPos = Math.floor(Math.random() * 12);
+    card.style.order = ramdomPos;
+  });
+}
 
-const image2 = document.createElement("img");
-image2.src = "./imgs/image2.png";
-
-const image3 = document.createElement("img");
-image3.src = "./imgs/image3.png";
-
-
-
-//     const image1 = document.createElement("img");
-//     image1.src = "./imgs/image1.png";
-
-//     const image2 = document.createElement("img");
-//     image2.src = "./imgs/image2.png";
-
-//     const image3 = document.createElement("img");
-//     image3.src = "./imgs/image3.png";
-
-//     const back = document.createElement("img");
-//     back.src = "./imgs/back.png";
-//     const frontOfCard = [image1, image1, image2, image2, image3, image3];
-
+shuffle();
