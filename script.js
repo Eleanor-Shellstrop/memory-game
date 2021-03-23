@@ -38,6 +38,7 @@ function addCard (index) {
 
   const cardBack = document.createElement('div');
   cardBack.setAttribute('id', 'card_back');
+
     //  Append sides to card first
   card.appendChild(cardBack);
   card.appendChild(cardFront);
@@ -72,33 +73,58 @@ shuffle();
 
 // FLIP CARDS ON CLICK
 
-const cardClass = document.getElementsByClassName('card_front');
-const flippedCards = document.querySelectorAll('.is-flipped');
+const board = document.getElementById('board');
 const cardsFaceUp = [];
 let guesses = 0;
-let firstGuess = '';
-let secondGuess = '';
 
-
-//  TODO: Conditional not working
-//  cards flip on click, push to cardsFaceUp, but won't auto-toggle when 2 are up.
+//---------------------------------------------------------------------------------
 cardList.forEach(card => {
+
+  //  Add event listener
   card.addEventListener('click', () => {
+
+    //  Toggle to flip for each click
     card.classList.toggle('is-flipped');
+
+    //  Flipped images to array to compare
     let cardImage = card.childNodes[1].style.background;
     cardsFaceUp.push(cardImage);
-    if (guesses === 2 && cardsFaceUp[0] === cardsFaceUp[1]) {
-        flippedCards.classList.toggle('match');
+
+    //  Check for pairs
+    board.querySelectorAll('.is-flipped').forEach(card => {
+      //  If a pair
+      if (guesses == 2 && cardsFaceUp[0] == cardsFaceUp[1]) {
+        let match = board.querySelectorAll('#card.is-flipped');
+        function addClass(){
+          for (let i = 0; i < match.length; i++) {
+            match[i].classList.add('disabled');
+          }
+        }
+        addClass();
         cardsFaceUp.pop();
         cardsFaceUp.pop();
         guesses = 0;
-    } else if (guesses == 2 && cardsFaceUp[0] !== cardsFaceUp[1]) {
-        flippedCards.classList.remove('is-flipped');
-        cardsFaceUp.pop();
-        cardsFaceUp.pop();
-        guesses = 0;
-    } else {
-      guesses++
-    }
-  });
-})
+      //  If not a pair  
+      } else if (guesses == 2 && cardsFaceUp[0] !== cardsFaceUp[1]){
+        //  Much select all every time since document constantly changes
+        let noMatch = board.querySelectorAll('#card.is-flipped');
+        //  Iterate through node list andremove class
+        function removeClass(){
+          for (let i = 0; i < noMatch.length; i++) {
+            noMatch[i].classList.remove('is-flipped');
+          }
+        };
+        //  Set timeout function so they dont flip back immediately
+        for (let i = 0; i < noMatch.length; i++){
+          setTimeout(function(){removeClass();}, 2000); // 2 seconds
+          cardsFaceUp.pop();
+        };
+        guesses = 0;  
+      //  If only one card chosen  
+      } else {
+        guesses++;
+      }
+    })
+  })
+}); 
+//----------------------------------------------------------------------------------

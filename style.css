@@ -53,3 +53,8 @@ header {
 #card.is-flipped {
     transform: translateX(-100%) rotateY(-180deg);
   }
+
+#card.disabled {
+   transform: rotateY(180deg);
+   transform: translateX(-100%) rotateY(-180deg);
+}
