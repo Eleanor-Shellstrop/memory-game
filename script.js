@@ -79,33 +79,36 @@ let guesses = 0;
 
 //---------------------------------------------------------------------------------
 cardList.forEach(card => {
-
   //  Add event listener
   card.addEventListener('click', () => {
-
     //  Toggle to flip for each click
+    guesses++
     card.classList.toggle('is-flipped');
 
     //  Flipped images to array to compare
     let cardImage = card.childNodes[1].style.background;
     cardsFaceUp.push(cardImage);
+    checkForPairs();
+  })
+});
 
-    //  Check for pairs
+function checkForPairs () {
+
+    //  Check for pairs on all flipped cards
     board.querySelectorAll('.is-flipped').forEach(card => {
       //  If a pair
-      if (guesses == 2 && cardsFaceUp[0] == cardsFaceUp[1]) {
+      if (guesses === 2 && cardsFaceUp[0] == cardsFaceUp[1]) {
         let match = board.querySelectorAll('#card.is-flipped');
         function addClass(){
           for (let i = 0; i < match.length; i++) {
             match[i].classList.add('disabled');
+            cardsFaceUp.pop();
           }
         }
         addClass();
-        cardsFaceUp.pop();
-        cardsFaceUp.pop();
         guesses = 0;
       //  If not a pair  
-      } else if (guesses == 2 && cardsFaceUp[0] !== cardsFaceUp[1]){
+      } else if (guesses === 2 && cardsFaceUp[0] !== cardsFaceUp[1]){
         //  Much select all every time since document constantly changes
         let noMatch = board.querySelectorAll('#card.is-flipped');
         //  Iterate through node list andremove class
@@ -116,15 +119,16 @@ cardList.forEach(card => {
         };
         //  Set timeout function so they dont flip back immediately
         for (let i = 0; i < noMatch.length; i++){
-          setTimeout(function(){removeClass();}, 2000); // 2 seconds
+          setTimeout(function(){
+            removeClass();
+          }, 2000); // 2 seconds
           cardsFaceUp.pop();
         };
         guesses = 0;  
       //  If only one card chosen  
       } else {
-        guesses++;
+        console.log(guesses);
       }
     })
-  })
-}); 
+  }
 //----------------------------------------------------------------------------------
