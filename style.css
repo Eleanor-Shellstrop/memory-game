@@ -58,3 +58,16 @@ header {
    transform: rotateY(180deg);
    transform: translateX(-100%) rotateY(-180deg);
 }
+
+#won {
+    width: 250px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-500px);
+    background: rgba(245, 245, 245, 0.8);
+    box-shadow: 0px 0px 20px black;
+}

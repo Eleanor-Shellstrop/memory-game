@@ -20,6 +20,7 @@ const images =  ["center / cover url(./imgs/image1.png)",
 const cards =   ["card1", "card2", "card3", "card4", "card5", "card6", 
                 "card7", "card8", "card9", "card10", "card11", "card12"]
  
+
 //* FUNCTIONS TO MAKE CARDS                
 /**
  * addCard(index) : Appends a card to the board; appends front and back sides to a card
@@ -48,9 +49,13 @@ function addCard (index) {
 
 
 //  Iterate through cards array to append 12 cards to HTML
-for (let i = 0; i < cards.length; i++) {
+function addCardsToBoard () {
+  for (let i = 0; i < cards.length; i++) {
   addCard([i]);
+  }
 }
+
+addCardsToBoard();
 
 //==============================================================================
 
@@ -149,12 +154,28 @@ function checkForPairs () {
 //  Update score
 
 let score = 0;
+const won = document.getElementById('won');
+const playAgainButton = document.getElementById('play_again');
 
 function updateScore () {
   score++;
 }
 
 function showWinnerDiv() {
-  const won = document.getElementById('won');
-  won.style.display = "block";
+  won.style.display = "flex";
 }
+
+//----------------------------------------------------------------------------------
+
+
+
+playAgainButton.addEventListener('click', () => {
+  won.style.display = "none";
+  for (let i = 0; i < cards.length; i++) {
+    let node = document.getElementById('card');
+    if (node.parentNode) {
+      node.parentNode.removeChild(node);
+    }
+  }
+  addCardsToBoard();
+})
