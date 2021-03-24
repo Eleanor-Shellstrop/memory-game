@@ -63,8 +63,8 @@ const cardList = document.querySelectorAll('#card');
 
 function shuffle() {
   cardList.forEach(card => {
-    let ramdomPosition = Math.floor(Math.random() * 12);
-    card.style.order = ramdomPosition;
+    let randomPosition = Math.floor(Math.random() * 12);
+    card.style.order = randomPosition;
   });
 }
 
@@ -78,6 +78,9 @@ const cardsFaceUp = [];
 let guesses = 0;
 
 //---------------------------------------------------------------------------------
+
+//* --------------------- EVENT LISTENER ---------------------
+
 cardList.forEach(card => {
   //  Add event listener
   card.addEventListener('click', () => {
@@ -92,11 +95,13 @@ cardList.forEach(card => {
   })
 });
 
-function checkForPairs () {
+//* --------------------- CHECK FOR MATCHED PAIRS ---------------------
 
-    //  Check for pairs on all flipped cards
-    board.querySelectorAll('.is-flipped').forEach(card => {
-      //  If a pair
+//  Check for pairs on all flipped cards
+function checkForPairs () {
+    board.querySelectorAll('.is-flipped').forEach(() => {
+
+      //  Is a match
       if (guesses === 2 && cardsFaceUp[0] == cardsFaceUp[1]) {
         let match = board.querySelectorAll('#card.is-flipped');
         function addClass(){
@@ -106,8 +111,15 @@ function checkForPairs () {
           }
         }
         addClass();
+        updateScore();
         guesses = 0;
-      //  If not a pair  
+        if (score === 6) {
+          setTimeout(function() {
+            showWinnerDiv();
+          }, 2000);
+        };
+
+      //  Is not a match  
       } else if (guesses === 2 && cardsFaceUp[0] !== cardsFaceUp[1]){
         //  Much select all every time since document constantly changes
         let noMatch = board.querySelectorAll('#card.is-flipped');
@@ -125,6 +137,7 @@ function checkForPairs () {
           cardsFaceUp.pop();
         };
         guesses = 0;  
+
       //  If only one card chosen  
       } else {
         console.log(guesses);
@@ -132,3 +145,16 @@ function checkForPairs () {
     })
   }
 //----------------------------------------------------------------------------------
+
+//  Update score
+
+let score = 0;
+
+function updateScore () {
+  score++;
+}
+
+function showWinnerDiv() {
+  const won = document.getElementById('won');
+  won.style.display = "block";
+}
