@@ -198,7 +198,8 @@
 
 
 class MemoryCard {
-  constructor(front, back) {
+  constructor(id, front, back) {
+    this.id = id;
     this.front = front;
     this.back = back;
   }
@@ -210,7 +211,7 @@ class Deck {
     this.makeCards();
     this.shuffle();
     this.render();
-    this.cardFlip();
+  
   }
   makeCards() {
     let cards =   ["card1", "card2", "card3", "card4", "card5", "card6", 
@@ -229,11 +230,13 @@ class Deck {
               "center / cover url(./imgs/image6.png)"];
     for (let i = 0; i < cards.length; i++) {  
       let assignImage = images.shift(); 
+      let uniqueID = "card_number_" + [i]
       let cardFront = assignImage;
       let cardBack = "back";
+      MemoryCard.id = uniqueID;
       MemoryCard.front = cardFront;
       MemoryCard.back = cardBack;
-      this.allCards.push(new MemoryCard(cardFront, cardBack));
+      this.allCards.push(new MemoryCard(uniqueID, cardFront, cardBack));
     }
   }
 shuffle() {
@@ -252,11 +255,14 @@ shuffle() {
     for (let i = 0; i < this.allCards.length; i++) {
       const card = document.createElement('div');
       card.classList = 'card';
+      card.setAttribute('id', this.allCards[i].id);
 
       const cardFront = document.createElement('div');
       cardFront.classList = 'card_front';
+      let uniqueFrontCardID = 'front_' + [i];
+      cardFront.setAttribute('id', uniqueFrontCardID);
       let pairImage = this.allCards[i].front;
-      cardFront.style.background = pairImage
+      cardFront.style.background = pairImage;
 
       const cardBack = document.createElement('div');
       cardBack.classList = 'card_back';
@@ -270,16 +276,110 @@ shuffle() {
     };
     return this;
   }
-  cardFlip() {
-    let cardClass = document.querySelectorAll(".card");
-    cardClass.forEach(card => {
-      card.addEventListener('click', () => {
-        card.classList.toggle('is-flipped');
-      })
-    })
-
-  }
+ 
 }
+
+/**
+ *  GAME
+ */
+
+
 const newDeal = new Deck;
 
 let locked = false;
+let cardsFaceUp = [];
+let cardClass = document.querySelectorAll(".card");
+let guesses = 0;
+
+function resetArray () {
+  for (let i = cardsFaceUp.length; i >= 0; i--) {
+    cardsFaceUp.pop();
+  }
+  guesses = 0;
+}
+
+function checkCards(){
+  if (guesses === 2){
+    let firstPick = cardsFaceUp[0];
+    let secondPick = cardsFaceUp[1];
+    if (firstPick[1] == secondPick[1]) {
+      let pair = board.querySelectorAll('.card.is-flipped');
+      function toggleClass(){
+        for (let i = 0; i < pair.length; i++) {
+          pair[i].classList.toggle('match');
+          pair[i].classList.remove('is-flipped');
+        }}
+        toggleClass();  
+      // firstPick.classList.add('match');
+      // secondPick.classList.add('match');
+      resetArray();
+
+    }
+    if (firstPick[1] !== secondPick[1]) {
+      locked = true;
+      let noMatch = board.querySelectorAll('.card.is-flipped');
+      function removeClass(){
+        for (let i = 0; i < noMatch.length; i++) {
+          noMatch[i].classList.remove('is-flipped');
+        }
+      };
+      //  Set timeout function so they dont flip back immediately
+      for (let i = 0; i < noMatch.length; i++){
+        setTimeout(function(){
+          removeClass();
+          locked = false;
+        }, 2000); // 2 seconds
+      };
+      resetArray();
+      clickToFlip();
+    }
+  }
+  if (guesses === 1) {
+    let thisCard = document.querySelector('.card.is-flipped');
+    thisCard.removeEventListener('click', flip);
+  }
+}
+
+function flip() {
+  if (locked) return;
+  this.classList.toggle('is-flipped');
+  let thisCard = document.getElementById(this.id);
+  let thisImage = this.childNodes[0].style.background;
+  cardsFaceUp.push([thisCard, thisImage]);
+  guesses++;
+  checkCards();
+}
+
+function clickToFlip () {
+cardClass.forEach(card => 
+  card.addEventListener('click', flip));}
+
+clickToFlip();
+
+
+//-------------------------------------------------------------------------
+let score = 0;
+const won = document.getElementById('won');
+const playAgainButton = document.getElementById('play_again');
+
+function updateScore () {
+  score++;
+}
+
+function showWinnerDiv() {
+  won.style.display = "flex";
+}
+
+
+playAgainButton.addEventListener('click', () => {
+  won.style.display = "none";
+  for (let i = 0; i < cards.length; i++) {
+    let node = document.getElementById('card');
+    if (node.parentNode) {
+      node.parentNode.removeChild(node);
+    }
+  }
+  addCardsToBoard();
+  shuffle();
+  addClickability();
+})
