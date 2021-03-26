@@ -1,3 +1,11 @@
+/** =========================================================
+ ** -----------------     CLASSES     -----------------------
+ ==========================================================*/
+
+//----------------------------------------------------------------
+//*  SINGLE MEMORY CARD
+//----------------------------------------------------------------
+
 class MemoryCard {
   constructor(id, front, back) {
     this.id = id;
@@ -5,6 +13,10 @@ class MemoryCard {
     this.back = back;
   }
 }
+
+//----------------------------------------------------------------
+//*  DECK OF 12 CARDS
+//----------------------------------------------------------------
 
 class Deck {
   constructor() {
@@ -81,10 +93,15 @@ class Deck {
  
 }
 
-/**
- *  GAME
- */
+//----------------------------------------------------------------------------------
 
+/** =========================================================
+ ** ------------------     GAME     -------------------------
+ ==========================================================*/
+
+//----------------------------------------------------------------
+//*  GLOBAL VARIABLES
+//----------------------------------------------------------------
 
 const newDeal = new Deck;
 
@@ -97,6 +114,11 @@ let score = 0;
 let locked = false;
 let cardsFaceUp = [];
 
+//----------------------------------------------------------------
+//*  GAME FUNCTIONS
+//----------------------------------------------------------------
+
+//  Clear the "cardsFaceUp" Array after every 2 cards are flipped
 
 function resetArray () {
   for (let i = cardsFaceUp.length; i >= 0; i--) {
@@ -105,6 +127,10 @@ function resetArray () {
   guesses = 0;
 }
 
+//----------------------------------------------------------------
+
+//  Check if all matches are made to switch winner display to flex
+
 function checkForWinner () {
   if (score == 6) {
     setTimeout(function () {
@@ -112,6 +138,16 @@ function checkForWinner () {
     }, 2000);
   } 
 }
+
+//----------------------------------------------------------------
+
+//  If 2 cards are face up, check for matching pair &  
+//    lock the board temporarily so other cards can't flip
+
+//  If 1 card is face up, lock that card so 
+//    it can't be clicked again in this turn
+
+//*  This function is called in "flip()"
 
 function checkCards () {
   let firstPick = cardsFaceUp[0];
@@ -156,6 +192,14 @@ function checkCards () {
   }
 }
 
+//----------------------------------------------------------------
+
+//  Push cards to "cardsFaceUp" array to check for matched pair,
+//  Add one to "guesses" counter,
+//  call "checkCards" function to look for pairs
+
+//* This function is called in "clickToFlip()"
+
 function flip () {
   if (locked) return;
   this.classList.toggle('is-flipped');
@@ -166,20 +210,33 @@ function flip () {
   checkCards();
 }
 
+//----------------------------------------------------------------
+
+//  Add event listener to every card to be able to click to flip
+
 function clickToFlip () {
+
+  //* Note: Declaration not repetitive. Load bearing code for "play again" button.
+  let cardClass = document.querySelectorAll(".card");
+
   cardClass.forEach(card => 
     card.addEventListener('click', flip)
   );
 }
 
+//  Call to start flipping
 clickToFlip();
 
 
-//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 
-//TODO: Adds new cards but won't flip them back
+//  Play Again button event listener
+//  Remove all cards from board, shuffle and deal again
+//  Reset score to 0
 
 playAgainButton.addEventListener('click', () => {
+  //  This declaration is also load bearing
+  let cardClass = document.querySelectorAll(".card");
   won.style.display = "none";
   for (let i = 0; i < cardClass.length; i++) {
     let node = document.getElementById(newDeal.allCards[i].id);
@@ -192,3 +249,5 @@ playAgainButton.addEventListener('click', () => {
   newDeal.render();
   clickToFlip();
 })
+
+//TODO: May add timer
