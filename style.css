@@ -135,9 +135,30 @@ a:visited {
 }
 
 @media (min-width: 663px) {
+    body {
+        height: 100vh;
+    }
+    header {
+        height: 10%;
+        margin: 2% auto;
+    }
+    main{
+        height: 80vh;
+    }
+    .card {
+        min-width: 160px;
+        min-height: 240px;
+    }
     #won {
         width: 500px;
         transform: translateY(-300px);
         font-size: 3em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card {
+        min-width: 240px;
+        min-height: 360px;
     }
 }
