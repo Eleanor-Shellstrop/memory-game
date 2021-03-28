@@ -243,5 +243,19 @@ a:visited {
     }
 }
 
-/* LAPTOP SIZE */
+/* LARGE TABLET AND LAPTOP SIZE */
 
+@media (min-width: 896px) {
+    #board {
+        height: 80vh;
+    }
+}
+
+@media (min-width: 900px) {
+    .card {
+        min-width: 90px;
+        min-height: 120px;
+        max-width: 240px;
+        max-height: 300px;
+    }
+}
