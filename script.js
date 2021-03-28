@@ -30,7 +30,8 @@ class Deck {
     let cards =   ["card1", "card2", "card3", "card4", "card5", "card6", 
                 "card7", "card8", "card9", "card10", "card11", "card12"];
 
-    let images =  ["center / cover url(./imgs/image1.png)", 
+    let images =  
+              ["center / cover url(./imgs/image1.png)", 
               "center / cover url(./imgs/image1.png)", 
               "center / cover url(./imgs/image2.png)",
               "center / cover url(./imgs/image2.png)",
@@ -67,14 +68,19 @@ class Deck {
 
   render() { 
     for (let i = 0; i < this.allCards.length; i++) {
+
       const card = document.createElement('div');
       card.classList = 'card';
       card.setAttribute('id', this.allCards[i].id);
 
       const cardFront = document.createElement('div');
       cardFront.classList = 'card_front';
+
+      //  Set ID for card flip function
       let uniqueFrontCardID = 'front_' + [i];
       cardFront.setAttribute('id', uniqueFrontCardID);
+      
+      //  Add image to style
       let pairImage = this.allCards[i].front;
       cardFront.style.background = pairImage;
 
@@ -108,6 +114,7 @@ const newDeal = new Deck;
 const won = document.getElementById('won');
 const playAgainButton = document.getElementById('play_again');
 let cardClass = document.querySelectorAll(".card");
+const time = document.getElementById('time');
 
 let guesses = 0;
 let score = 0;
@@ -133,8 +140,10 @@ function resetArray () {
 
 function checkForWinner () {
   if (score == 6) {
+    activeTimer = false;
     setTimeout(function () {
     won.style.display = "flex";
+    time.innerText = "You matched all the cards in " + minutes + " minutes and " + seconds + " seconds";
     }, 2000);
   } 
 }
@@ -230,6 +239,31 @@ clickToFlip();
 
 //-------------------------------------------------------------------------------------
 
+//  Timer functions
+
+const start = document.getElementById('start');
+let seconds = 0;
+let minutes = 0;
+let activeTimer = false;
+
+function timer () {
+  if (activeTimer == true) {
+    seconds++;
+    if (seconds == 60) {
+      minutes++;
+      seconds = 0;
+    }
+    setTimeout('timer()', 1000);
+  }
+}
+
+start.addEventListener('click', () => {
+  activeTimer = true;
+  timer();
+})
+
+//-------------------------------------------------------------------------------------
+
 //  Play Again button event listener
 //  Remove all cards from board, shuffle and deal again
 //  Reset score to 0
@@ -245,9 +279,10 @@ playAgainButton.addEventListener('click', () => {
     }
   }
   score = 0;
+  seconds = 0;
+  minutes = 0;
   newDeal.shuffle();
   newDeal.render();
   clickToFlip();
 })
 
-//TODO: May add timer
