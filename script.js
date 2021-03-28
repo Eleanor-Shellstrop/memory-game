@@ -162,7 +162,7 @@ function checkCards () {
   let firstPick = cardsFaceUp[0];
   let secondPick = cardsFaceUp[1]; 
 
-  if (guesses === 2 && firstPick[1] == secondPick[1]){
+  if (guesses === 2 && firstPick[1] == secondPick[1]) {
     locked = true;
     let pair = board.querySelectorAll('.card.is-flipped');
     
@@ -172,8 +172,10 @@ function checkCards () {
     }
     resetArray();
     score++;
-    locked = false;
     checkForWinner();
+    setTimeout(function(){
+      locked = false;
+    }, 1000);
   }
 
   if (guesses == 2 && firstPick[1] !== secondPick[1]) {
@@ -210,7 +212,7 @@ function checkCards () {
 //* This function is called in "clickToFlip()"
 
 function flip () {
-  if (locked) return;
+  if (locked == true) return;
   this.classList.toggle('is-flipped');
   let thisCard = document.getElementById(this.id);
   let thisImage = this.childNodes[0].style.background;
@@ -232,9 +234,6 @@ function clickToFlip () {
     card.addEventListener('click', flip)
   );
 }
-
-//  Call to start flipping
-clickToFlip();
 
 
 //-------------------------------------------------------------------------------------
@@ -260,13 +259,18 @@ function timer () {
 start.addEventListener('click', () => {
   activeTimer = true;
   timer();
+  //  Call to start flipping
+  clickToFlip();
+  setTimeout(function(){
+    start.style.display = 'none';
+  }, 1000);
 })
 
 //-------------------------------------------------------------------------------------
 
 //  Play Again button event listener
 //  Remove all cards from board, shuffle and deal again
-//  Reset score to 0
+//  Reset score and timer to 0
 
 playAgainButton.addEventListener('click', () => {
   //  This declaration is also load bearing
@@ -283,6 +287,6 @@ playAgainButton.addEventListener('click', () => {
   minutes = 0;
   newDeal.shuffle();
   newDeal.render();
-  clickToFlip();
+  start.style.display= 'inline-block';
 })
 

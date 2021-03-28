@@ -41,6 +41,7 @@ h1 {
                     2px 2px 1px magenta;
     font-size: 2em;
     margin: 10px auto;
+    padding: 5px;
 }
 
 
@@ -78,6 +79,7 @@ button {
 }
 
 #start {
+    background-color: gold;
     margin: 0px calc(50% - 100px);
 }
 
