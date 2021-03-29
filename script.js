@@ -143,7 +143,11 @@ function checkForWinner () {
     activeTimer = false;
     setTimeout(function () {
     won.style.display = "flex";
-    time.innerText = "You matched all the cards in " + minutes + " minutes and " + seconds + " seconds";
+    if (minutes == 1) {
+      time.innerText = "You matched all the cards in " + minutes + " minute and " + seconds + " seconds";
+    } else {
+      time.innerText = "You matched all the cards in " + minutes + " minutes and " + seconds + " seconds";
+    }
     }, 2000);
   } 
 }
