@@ -259,3 +259,18 @@ a:visited {
         max-height: 300px;
     }
 }
+
+@media (min-width: 1200px) {
+    #won {
+        transform: translateY(-500px) scale(1.25);
+    }
+}
+
+/* LARGE MONITOR */
+
+@media (min-width: 1600px) {
+    .card {
+        min-width: 200px;
+        min-height: 280px; 
+    }
+}
