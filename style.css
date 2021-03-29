@@ -269,6 +269,9 @@ a:visited {
 /* LARGE MONITOR */
 
 @media (min-width: 1600px) {
+    #board {
+        width: 80vw;
+    }
     .card {
         min-width: 200px;
         min-height: 280px; 

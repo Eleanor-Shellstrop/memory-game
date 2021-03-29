@@ -169,10 +169,10 @@ function checkCards () {
   if (guesses === 2 && firstPick[1] == secondPick[1]) {
     locked = true;
     let pair = board.querySelectorAll('.card.is-flipped');
-    
     for (let i = 0; i < pair.length; i++) {
       pair[i].classList.toggle('match');
       pair[i].classList.remove('is-flipped');
+      pair[i].removeEventListener('click', flip);
     }
     resetArray();
     score++;
@@ -227,7 +227,7 @@ function flip () {
 
 //----------------------------------------------------------------
 
-//  Add event listener to every card to be able to click to flip
+//*  Add event listener to every card to be able to click to flip
 
 function clickToFlip () {
 
